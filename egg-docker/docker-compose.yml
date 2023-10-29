@@ -1,8 +1,9 @@
 version: "3.9"
 services:
+
   redis_container:
     image: redis:latest
-    container_name: local-docker-redis-egg
+    container_name: egg-redis
     ports:
       - 6379:6379
     volumes:
@@ -16,10 +17,45 @@ services:
 
   egg-web:
     image: nginx
-    container_name: local-docker-egg
+    container_name: egg-nginx
     ports:
       - "80:80"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/servers:/etc/nginx/servers:ro
     command: [ nginx-debug, '-g', 'daemon off;' ]
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.13
+    container_name: egg-elasticsearch
+    environment:
+      - node.name=es-node
+      - cluster.name=search-cluster
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
+      - xpack.security.transport.ssl.enabled=false
+    ports:
+      - 9200:9200 # https
+      - 9300:9300 # tcp
+    networks:
+      - es-bridge
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.13
+    container_name: egg-kibana
+    environment:
+      SERVER_NAME: kibana
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    ports:
+      - 5601:5601
+    # Elasticsearch Start Dependency
+    depends_on:
+      - elasticsearch
+    networks:
+      - es-bridge
+
+
+networks:
+  es-bridge:
+    driver: bridge
