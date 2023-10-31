@@ -85,6 +85,9 @@ public class UsersService {
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         UserResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
 
+        System.out.println(tokenInfo.getAccessToken());
+        System.out.println(tokenInfo.getRefreshToken());
+
         redisTemplate.opsForValue()
                 .set("RT:" + userDetails.getUsername(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
 
