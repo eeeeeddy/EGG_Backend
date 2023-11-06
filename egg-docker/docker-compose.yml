@@ -85,6 +85,27 @@ services:
     networks:
       - es-bridge
 
+  mongodb:
+    image: yisc/mongo-arm64
+    container_name: mongodb
+    hostname: mongodb
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - /Users/seungyunlee/Downloads/spark-yarn-docker-main/mongodb:/data/db
+      #- /Users/seongcheollee/Documents/env/mongo:/Ditto
+
+  fastapi:
+    image: yisc/fastapi-arm64
+    container_name: fastapi
+    ports:
+      - '8000:8080'
+    volumes:
+      - /Users/seungyunlee/Downloads/spark-yarn-docker-main/fastapi/src:/src
+    working_dir: /src
+    command: uvicorn main:app --host 0.0.0.0 --port 8080 --reload
+
 
 networks:
   es-bridge:
