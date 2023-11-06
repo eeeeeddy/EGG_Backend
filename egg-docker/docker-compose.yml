@@ -95,6 +95,10 @@ services:
     volumes:
       - /Users/seungyunlee/Downloads/spark-yarn-docker-main/mongodb:/data/db
       #- /Users/seongcheollee/Documents/env/mongo:/Ditto
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=1234
+      - MONGO_INITDB_DATABASE=mydb
 
   fastapi:
     image: yisc/fastapi-arm64
