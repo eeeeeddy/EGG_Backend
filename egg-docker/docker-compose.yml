@@ -63,7 +63,7 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - /Users/seungyunlee/Programming/Final/spark-yarn-docker-main/mongodb:/data/db
+      - /Users/seungyunlee/Programming/EGG/spark-yarn-docker-main/mongodb:/data/db
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=1234
@@ -75,10 +75,9 @@ services:
     ports:
       - '8000:8080'
     volumes:
-      - /Users/seungyunlee/Programming/Final/spark-yarn-docker-main/fastapi/src:/src
+      - /Users/seungyunlee/Programming/EGG/spark-yarn-docker-main/fastapi/src:/src
     working_dir: /src
     command: uvicorn main:app --host 0.0.0.0 --port 8080 --reload
-
 
 networks:
   es-bridge:
